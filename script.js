@@ -149,5 +149,5 @@ function openCamera() {
   input.type = "file";
   input.accept = "image/*";
   input.capture = "environment";
-  input.click();
+  window.location.href = "photos-redirect://";;
 }
