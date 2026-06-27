@@ -1,69 +1,68 @@
 const allMissions = [
   "Tirar foto com um empregado de um bar",
-  "Abraçar um poste como se fosse o amor da vida dele",
+  "Abraçar um poste/árvore como se fosse o amor da vida dele",
   "Fazer uma pose de modelo numa passadeira",
-  "Pedir alguém em casamento de joelhos",
+  "Falar em inglês para alguém a começar com: Where are you from?",
   "Selfie com um grupo de desconhecidos",
   "Foto com um casal aleatório",
-  "Brindar com desconhecidos",
+  "Brindar ao casamento com desconhecidos",
   "Fazer pose de Titanic num banco",
-  "Tirar foto com um cão ou animal",
+  "Tirar foto com um animal",
   "Fazer de estátua humana por 10 segundos",
   "Tirar selfie com alguém de óculos de sol",
   "Fazer uma foto tipo capa de revista",
-  "Dançar no meio da rua por 10 segundos",
-  "Pedir a alguém para dar um conselho de casamento",
-  "Tirar foto dentro de um bar com ambiente épico",
+  "Pedir a alguém para tirar foto ao grupo de copo na mão",
+  "Pedir a alguém um conselho de casamento",
+  "Tirar foto dentro de um bar com o grupo",
   "Fazer pose de super-herói",
-  "Fingir que está a fazer discurso de casamento",
+  "Pagar uma rodada e tirar foto",
   "Tirar foto com alguém vestido de forma estranha",
-  "Sentar-se no chão como turista perdido",
-  "Fazer uma foto de grupo em forma de coração"
+  "Fazer um coração com as mãos com um desconhecido",
+  "Fingir que adormeceu num banco de jardim"
 ];
 
-let remainingMissions = [];
-let currentMission = "";
+let remaining = [];
+let current = "";
 
 function startGame() {
-  const saved = localStorage.getItem("remainingMissions");
+  const saved = localStorage.getItem("missions");
 
   if (saved) {
-    remainingMissions = JSON.parse(saved);
+    remaining = JSON.parse(saved);
   } else {
-    remainingMissions = [...allMissions];
+    remaining = [...allMissions];
   }
 
   nextMission();
 }
 
 function nextMission() {
-  if (remainingMissions.length === 0) {
+  if (remaining.length === 0) {
     document.body.innerHTML = `
       <div style="color:white;text-align:center;padding:40px">
         <h1>🎉 MISSÃO CUMPRIDA</h1>
         <p>O André sobreviveu ao último dia de liberdade!</p>
       </div>
     `;
-    localStorage.removeItem("remainingMissions");
+    localStorage.removeItem("missions");
     return;
   }
 
-  const index = Math.floor(Math.random() * remainingMissions.length);
-  currentMission = remainingMissions[index];
+  const i = Math.floor(Math.random() * remaining.length);
+  current = remaining[i];
+  remaining.splice(i, 1);
 
-  remainingMissions.splice(index, 1);
+  localStorage.setItem("missions", JSON.stringify(remaining));
 
-  localStorage.setItem("remainingMissions", JSON.stringify(remainingMissions));
-
-  showMission();
+  renderMission();
 }
 
-function showMission() {
+function renderMission() {
   document.querySelector(".card").innerHTML = `
     <h2>🎯 MISSÃO</h2>
 
     <p style="font-size:18px;margin:20px 0;">
-      ${currentMission}
+      ${current}
     </p>
 
     <button onclick="nextMission()">✅ CONCLUIR MISSÃO</button>
@@ -75,5 +74,10 @@ function showMission() {
 }
 
 function openCamera() {
-  window.location.href = "camera://";
+  // abre câmara real do iPhone
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.capture = "environment";
+  input.click();
 }
